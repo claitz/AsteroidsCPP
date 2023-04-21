@@ -1,6 +1,6 @@
 #pragma once
-#include "raylib.h"
 #include <vector>
+#include <raylib.h>
 #include "constants.h"
 
 class Asteroid;

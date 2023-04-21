@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include "raylib.h"
 
 namespace Constants {
     const int SCREEN_WIDTH = 800;
@@ -18,7 +19,7 @@ namespace Constants {
     const float BULLET_SPEED = 5.f;
     const float BULLET_LIFETIME = 5.f;
     const float BULLET_RADIUS = 2.f;
-    const Color BULLET_COLOR = RED;
+    const Color BULLET_COLOR = BLUE;
 
     // Asteroids
     const int ASTEROID_COUNT = 5;

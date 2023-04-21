@@ -1,11 +1,28 @@
 #include "spaceship.h"
+#include "gamestate.h"
 #include <cmath>
 #include <iostream>
 #include <raymath.h>
 
-Spaceship Spaceship::createSpaceship() {
+void Spaceship::createSpaceship(Spaceship &spaceship) {
 
-    return Spaceship();
+    spaceship.position = { Constants::SCREEN_WIDTH / 2.0f, Constants::SCREEN_HEIGHT / 2.0f };
+    spaceship.speed = Constants::SPACESHIP_SPEED;
+    spaceship.radius = 10.0f;
+    spaceship.velocity = { 0.0f, 0.0f };
+    spaceship.rotationDirection = 0.0f;
+    spaceship.rotationSpeed = Constants::SPACESHIP_ROT_SPEED;
+    spaceship.bThrust = false;
+
+    spaceship.shapePoints = {
+            { 0.0f, -spaceship.radius },
+            { spaceship.radius, spaceship.radius },
+            { -spaceship.radius, spaceship.radius }
+    };
+}
+
+void Spaceship::setThrust(bool bThrust) {
+    this->bThrust = bThrust;
 }
 
 void Spaceship::move() {
@@ -13,20 +30,25 @@ void Spaceship::move() {
 
     if (bThrust) {
         float radAngle = (angle - 90.0f) * PI / 180.0f; // Subtract 90.0f from the angle
-        Vector2 velocity = { cos(radAngle), sin(radAngle) };
-        position = Vector2Add(position, Vector2Scale(velocity, speed * GetFrameTime()));
+        Vector2 thrustDirection = { cos(radAngle), sin(radAngle) };
+        velocity = Vector2Scale(thrustDirection, speed);
+    } else {
+        velocity = {0, 0};
     }
+
+    position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime()));
 }
+
 
 void Spaceship::update() {
     move();
-    for (Bullet& bullet : bullets) {
+    for (Bullet& bullet : gameState.bullets) {
         bullet.update();
     }
 
-    bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
+    gameState.bullets.erase(std::remove_if(gameState.bullets.begin(), gameState.bullets.end(),
                                  [](const Bullet& bullet) { return bullet.lifetime <= 0; }),
-                  bullets.end());
+                            gameState.bullets.end());
 }
 
 void Spaceship::draw() {
@@ -49,7 +71,7 @@ void Spaceship::draw() {
     Color color = RAYWHITE;
     DrawTriangleLines(transformedPoints[0], transformedPoints[1], transformedPoints[2], color);
 
-    for (Bullet& bullet : bullets) {
+    for (Bullet& bullet : gameState.bullets) {
         bullet.draw();
     }
 }
@@ -72,11 +94,12 @@ void Spaceship::respawn() {
 }
 
 void Spaceship::shoot() {
-    std::cout << "Shoot" << std::endl;
-
     Bullet bullet;
 
     bullet.createBullet(position.x, position.y, angle, Constants::BULLET_SPEED);
-    bullets.push_back(bullet);
+    gameState.bullets.push_back(bullet);
 }
 
+Spaceship::Spaceship(GameState &gameState) : gameState(gameState) {
+    createSpaceship(*this);
+}

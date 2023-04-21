@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "utils.h"
 #include "spaceship.h"
+#include "raymath.h"
 
 Asteroid Asteroid::createAsteroid(int asteroidLevel) {
     Asteroid newAsteroid;

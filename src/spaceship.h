@@ -1,37 +1,36 @@
 #pragma once
+#include "constants.h"
 #include "raylib.h"
 #include <vector>
-#include "bullet.h"
-#include "constants.h"
+
+class GameState;
 
 class Spaceship {
+    GameState& gameState;
+
 public:
-    static Spaceship createSpaceship();
+    Spaceship(GameState& gameState);
+
+    static void createSpaceship(Spaceship &spaceship);
 
     void update();
     void draw();
+    void setThrust(bool bThrust);
     void move();
     void die();
     void respawn();
     void shoot();
 
     int lives = Constants::STARTING_LIVES;
-    Vector2 velocity = {0.0f, 0.0f};
-    Vector2 position = {Constants::STARTING_POSITION_X, Constants::STARTING_POSITION_Y};
-    float angle = 0.0f;
-    float radius = 10.0f;
+    Vector2 velocity;
+    Vector2 position;
+    float angle;
+    float radius;
 
-    bool bThrust = false;
-    float speed = Constants::SPACESHIP_SPEED;
-    float rotationSpeed = Constants::SPACESHIP_ROT_SPEED;
-    float rotationDirection = 0.0f;
+    bool bThrust;
+    float speed;
+    float rotationSpeed;
+    float rotationDirection;
 
-
-    const std::vector<Vector2> shapePoints  = {
-            { 0.0f, -radius },
-            { radius, radius },
-            { -radius, radius }
-    };
-
-    std::vector<Bullet> bullets;
+    std::vector<Vector2> shapePoints;
 };
