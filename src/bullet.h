@@ -14,6 +14,8 @@ public:
     float radius = Constants::BULLET_RADIUS; // Radius
     Color color = Constants::BULLET_COLOR; // Color
 
+    bool bDestroyed = false;
+
     void createBullet(float startX, float startY, float angle, float startSpeed);
     void update();
     void draw();

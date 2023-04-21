@@ -16,4 +16,6 @@ public:
     float dx = 0.0f, dy = 0.0f;
     float radius = 0.0f;
     std::vector<Vector2> points = {};
+
+    bool bDestroyed = false;
 };

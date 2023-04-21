@@ -46,8 +46,6 @@ void Asteroid::update(Spaceship& spaceship) {
 }
 
 void Asteroid::draw() {
-
-   // TraceLog(LOG_INFO, "Drawing asteroid at (%f, %f) with %d points", x, y, points.size());
     if (points.empty()) return;
 
     std::vector<Vector2> translated_points = points;
@@ -57,6 +55,5 @@ void Asteroid::draw() {
     }
     translated_points.push_back(translated_points[0]);
 
-    Color color = RAYWHITE;
-    DrawLineStrip(translated_points.data(), translated_points.size(), color);
+    DrawLineStrip(translated_points.data(), translated_points.size(), Constants::ASTEROID_COLOR);
 }

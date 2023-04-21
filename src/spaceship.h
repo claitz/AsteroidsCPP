@@ -9,19 +9,17 @@ class Spaceship {
     GameState& gameState;
 
 public:
-    Spaceship(GameState& gameState);
+    explicit Spaceship(GameState& gameState);
 
     static void createSpaceship(Spaceship &spaceship);
 
     void update();
     void draw();
-    void setThrust(bool bThrust);
+    void setThrust(bool bNewThrust);
     void move();
     void die();
-    void respawn();
     void shoot();
 
-    int lives = Constants::STARTING_LIVES;
     Vector2 velocity{};
     Vector2 position{};
     float angle{};
@@ -33,4 +31,6 @@ public:
     float rotationDirection{};
 
     std::vector<Vector2> shapePoints;
+
+    bool bDestroyed = false;
 };

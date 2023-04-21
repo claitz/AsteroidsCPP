@@ -21,11 +21,13 @@ void Spaceship::createSpaceship(Spaceship &spaceship) {
     };
 }
 
-void Spaceship::setThrust(bool bThrust) {
-    this->bThrust = bThrust;
+void Spaceship::setThrust(bool bNewThrust) {
+    this->bThrust = bNewThrust;
 }
 
 void Spaceship::move() {
+    if (bDestroyed) return;
+
     angle += rotationDirection * rotationSpeed * GetFrameTime();
 
     if (bThrust) {
@@ -61,30 +63,26 @@ void Spaceship::draw() {
         point = Vector2Add(point, position);
     }
 
-    Color color = RAYWHITE;
-    DrawTriangleLines(transformedPoints[0], transformedPoints[1], transformedPoints[2], color);
+    DrawTriangleLines(transformedPoints[0], transformedPoints[1], transformedPoints[2], Constants::SPACESHIP_COLOR);
 
     for (Bullet& bullet : gameState.bullets) {
         bullet.draw();
     }
 }
 
-
 void Spaceship::die() {
-    if (lives > 0) {
-        lives--;
-        respawn();
-    } else {
-        std::cout << "Game Over" << std::endl;
-        // TODO: Game over
+    if (!bDestroyed) {
+        gameState.lives -= 1;
+        bDestroyed = true;
+
+        if (gameState.lives <= 0) {
+            // Game over
+        } else {
+            gameState.respawnSpaceship();
+        }
     }
 }
 
-void Spaceship::respawn() {
-    position.x = Constants::STARTING_POSITION_X;
-    position.y = Constants::STARTING_POSITION_Y;
-    angle = 0.f;
-}
 
 void Spaceship::shoot() {
     Bullet bullet;
