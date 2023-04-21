@@ -6,9 +6,9 @@ public:
     float x, y; // Position
     float dx, dy; // Direction
     float speed; // Speed
-    int lifetime; // Lifetime in frames
+    float lifetime; // Lifetime in seconds
 
-    void createBullet(float startX, float startY, float angle, float startSpeed, int startLifetime);
+    void createBullet(float startX, float startY, float angle, float startSpeed, float startLifetime);
     void update();
     void draw();
 };

@@ -15,14 +15,12 @@ namespace Constants {
     const float SPACESHIP_ROT_SPEED = 100.f;
 
     // Bullets
-    const float BULLET_SPEED = 0.01f;
-    const int BULLET_LIFETIME = 15000;
+    const float BULLET_SPEED = 5.f;
+    const float BULLET_LIFETIME = 5.f;
 
     // Asteroids
     const int ASTEROID_COUNT = 5;
     const int ASTEROID_LEVELS = 3;
     const float ASTEROID_SPEED = 1.5f;
     const int ASTEROID_POINTS = 8;
-
-
 }
