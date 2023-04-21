@@ -11,7 +11,7 @@ The game is being developed in C++ and [Raylib](https://github.com/raysan5/rayli
 
 ## Screenshots
 
-![AsteroidCPP Screenshot](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjc1ZDUwNWIwM2Y1YTE2YTVhOGQ3YmRmMzIwZDEwYTk2OWNhNmYyZCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/YvMR9miNhZBbtATyEj/giphy.gif?text=AsteroidsCPP)
+![AsteroidCPP Screenshot](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTkxNTNlZTFjMDIwMWJmZTY4ZWU2MmVmYTBmNjI0YzhkOGIwMGNjYSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/gpiTxrImfJGCwYCKgs/giphy.gif?text=AsteroidsCPP)
 
 
 ## License
