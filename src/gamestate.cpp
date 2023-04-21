@@ -5,9 +5,7 @@
 #include <algorithm>
 
 GameState::GameState(): spaceship(*this) {
-
-    spawnAsteroids(Constants::ASTEROID_COUNT);
-
+    currentState = GameStateType::MainMenu;
 }
 
 void GameState::spawnAsteroids(int count) {
@@ -22,6 +20,26 @@ void GameState::spawnAsteroids(int count) {
 }
 
 void GameState::update() {
+    switch (currentState) {
+        case GameStateType::MainMenu:
+            updateMainMenu();
+            break;
+        case GameStateType::InGame:
+            updateInGame();
+            break;
+        case GameStateType::GameOver:
+            updateGameOver();
+            break;
+    }
+}
+
+void GameState::updateMainMenu() {
+    if (IsKeyPressed(KEY_ENTER)) {
+        startGame();
+    }
+}
+
+void GameState::updateInGame() {
     for (Asteroid &asteroid : asteroids) {
         asteroid.update(spaceship);
         asteroid.draw();
@@ -46,8 +64,15 @@ void GameState::update() {
 
     removeInactive();
 
-    renderHUD();
+    renderInGame();
 }
+
+void GameState::updateGameOver() {
+    if (IsKeyPressed(KEY_ENTER)) {
+        startGame();
+    }
+}
+
 
 void GameState::checkCollisions() {
     checkAsteroidCollisions();
@@ -78,10 +103,9 @@ void GameState::checkBulletCollisions() {
     }
 }
 
-void GameState::renderHUD() const {
+void GameState::renderInGame() const {
     const int fontSize = Constants::FONT_SIZE;
     const int fontSpacing = Constants::FONT_SPACING;
-    const int fontSizeLarge = Constants::FONT_SIZE_LARGE;
     const Color fontColor = Constants::FONT_COLOR;
 
     // Score
@@ -97,17 +121,42 @@ void GameState::renderHUD() const {
     std::string levelText = "Level: " + std::to_string(level);
     int levelTextWidth = MeasureText(levelText.c_str(), fontSize);
     DrawText(levelText.c_str(), GetScreenWidth() / 2 - levelTextWidth / 2, fontSpacing, fontSize, fontColor);
-
-    // Game Over
-    if (bGameOver){
-        std::string gameOverText = "GAME OVER";
-        int gameOverTextWidth = MeasureText(gameOverText.c_str(), fontSizeLarge);
-        DrawText(gameOverText.c_str(), GetScreenWidth() / 2 - gameOverTextWidth / 2, GetScreenHeight() / 2, fontSizeLarge, fontColor);
-    }
 }
 
-void GameState::removeInactive() {
+void GameState::renderMainMenu() const{
+    const int fontSize = Constants::FONT_SIZE_LARGE;
+    const int fontSpacing = Constants::FONT_SPACING;
+    const Color fontColor = Constants::FONT_COLOR;
 
+
+    // Title
+    std::string titleText = "Asteroids";
+    int titleTextWidth = MeasureText(titleText.c_str(), fontSize);
+    DrawText(titleText.c_str(), GetScreenWidth() / 2 - titleTextWidth / 2, fontSpacing, fontSize, fontColor);
+
+    // Start
+    std::string instructionsText = "Press ENTER to start";
+    int instructionsTextWidth = MeasureText(instructionsText.c_str(), fontSize / 2);
+    DrawText(instructionsText.c_str(), GetScreenWidth() / 2 - instructionsTextWidth / 2, GetScreenHeight() / 2, fontSize / 2, fontColor);
+}
+
+void GameState::renderGameOver() const{
+    const int fontSize = Constants::FONT_SIZE_LARGE;
+    const int fontSpacing = Constants::FONT_SPACING * 5;
+    const Color fontColor = Constants::FONT_COLOR;
+
+    std::string gameOverText = "GAME OVER";
+    int gameOverTextWidth = MeasureText(gameOverText.c_str(), fontSize);
+    DrawText(gameOverText.c_str(), GetScreenWidth() / 2 - gameOverTextWidth / 2, GetScreenHeight() / 2 - fontSpacing, fontSize, fontColor);
+
+    // Start
+    std::string instructionsText = "Press ENTER to restart";
+    int instructionsTextWidth = MeasureText(instructionsText.c_str(), fontSize / 2);
+    DrawText(instructionsText.c_str(), GetScreenWidth() / 2 - instructionsTextWidth / 2, GetScreenHeight() / 2, fontSize / 2, fontColor);
+}
+
+
+void GameState::removeInactive() {
     // Remove destroyed bullets
     bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
                                  [](const Bullet& bullet) { return bullet.bDestroyed; }),
@@ -148,7 +197,16 @@ std::vector<Asteroid> GameState::subdivideAsteroid(Asteroid &parentAsteroid) {
     return newAsteroids;
 }
 
+void GameState::startGame() {
+    currentState = GameStateType::InGame;
+    spawnAsteroids(Constants::ASTEROID_COUNT * level);
+}
+
+void GameState::nextLevel() {
+
+}
+
 void GameState::endGame() {
-    bGameOver = true;
+    currentState = GameStateType::GameOver;
 }
 

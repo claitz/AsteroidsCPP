@@ -4,6 +4,13 @@
 #include "asteroid.h"
 #include <vector>
 
+enum class GameStateType {
+    MainMenu,
+    InGame,
+    GameOver
+};
+
+
 class GameState {
 public:
     int level = 1;
@@ -14,7 +21,7 @@ public:
     std::vector<Asteroid> asteroids;
     std::vector<Bullet> bullets;
 
-    bool bGameOver = false;
+    GameStateType currentState;
 
     GameState();
 
@@ -22,13 +29,23 @@ public:
 
     void update();
 
+    void updateMainMenu();
+
+    void updateInGame();
+
+    void updateGameOver();
+
     void checkCollisions();
 
     void checkAsteroidCollisions();
 
     void checkBulletCollisions();
 
-    void renderHUD() const;
+    void renderInGame() const;
+
+    void renderMainMenu() const;
+
+    void renderGameOver() const;
 
     void removeInactive();
 
@@ -37,6 +54,10 @@ public:
     void respawnSpaceship();
 
     static std::vector<Asteroid> subdivideAsteroid(Asteroid &parentAsteroid);
+
+    void startGame();
+
+    void nextLevel();
 
     void endGame();
 };

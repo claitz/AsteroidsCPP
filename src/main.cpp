@@ -34,15 +34,26 @@ int main() {
             gameState.spaceship.shoot();
         }
 
+        // Call the update function on the game state
+        gameState.update();
+
         // Draw
         //----------------------------------------------------------------------------------
-
         BeginDrawing();
 
         ClearBackground(BLACK);
 
-        // Call the update function on the game state
-        gameState.update();
+        switch (gameState.currentState) {
+            case GameStateType::MainMenu:
+                gameState.renderMainMenu();
+                break;
+            case GameStateType::InGame:
+                gameState.renderInGame();
+                break;
+            case GameStateType::GameOver:
+                gameState.renderGameOver();
+                break;
+        }
 
         EndDrawing();
         //----------------------------------------------------------------------------------

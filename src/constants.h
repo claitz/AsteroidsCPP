@@ -2,6 +2,8 @@
 #include "raylib.h"
 
 namespace Constants {
+
+    // Screen
     const int SCREEN_WIDTH = 1920;
     const int SCREEN_HEIGHT = 1080;
 
@@ -22,7 +24,7 @@ namespace Constants {
     const int ENEMY_BASE_SCORE = 100;
 
     // Asteroids
-    const int ASTEROID_COUNT = 20;
+    const int ASTEROID_COUNT = 10;
     const int ASTEROID_LEVELS = 3;
     const float ASTEROID_SPEED = 1.5f;
     const int ASTEROID_POINTS = 8;
@@ -34,5 +36,4 @@ namespace Constants {
     const Color FONT_COLOR = RAYWHITE;
 
     const int FONT_SIZE_LARGE = 50;
-    const int FONT_SPACING_LARGE = 20;
 }
