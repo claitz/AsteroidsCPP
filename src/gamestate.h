@@ -14,11 +14,11 @@ public:
     std::vector<Asteroid> asteroids;
     std::vector<Bullet> bullets;
 
-    bool bDestroyed = false;
+    bool bGameOver = false;
 
     GameState();
 
-    void spawnInitialAsteroids();
+    void spawnAsteroids(int count);
 
     void update();
 
@@ -35,4 +35,8 @@ public:
     void addScore(int enemyLevel);
 
     void respawnSpaceship();
+
+    static std::vector<Asteroid> subdivideAsteroid(Asteroid &parentAsteroid);
+
+    void endGame();
 };

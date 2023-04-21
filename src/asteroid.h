@@ -6,7 +6,7 @@ class Spaceship;
 
 class Asteroid {
 public:
-    static Asteroid createAsteroid(int asteroidLevel);
+    static Asteroid createAsteroid(int asteroidLevel, float asteroidX, float asteroidY);
 
     void update(Spaceship& spaceship);
     void draw();

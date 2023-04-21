@@ -1,7 +1,6 @@
 #include "spaceship.h"
 #include "gamestate.h"
 #include <cmath>
-#include <iostream>
 #include <raymath.h>
 
 void Spaceship::createSpaceship(Spaceship &spaceship) {
@@ -47,6 +46,8 @@ void Spaceship::update() {
 }
 
 void Spaceship::draw() {
+    if (bDestroyed || gameState.bGameOver) return;
+
     auto transformedPoints = shapePoints;
 
     // Apply rotation transformation
@@ -76,7 +77,7 @@ void Spaceship::die() {
         bDestroyed = true;
 
         if (gameState.lives <= 0) {
-            // Game over
+            gameState.endGame();
         } else {
             gameState.respawnSpaceship();
         }
@@ -85,6 +86,8 @@ void Spaceship::die() {
 
 
 void Spaceship::shoot() {
+    if (bDestroyed) return;
+
     Bullet bullet;
 
     bullet.createBullet(position.x, position.y, angle, Constants::BULLET_SPEED);

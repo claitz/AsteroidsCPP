@@ -4,12 +4,12 @@
 #include "spaceship.h"
 #include "raymath.h"
 
-Asteroid Asteroid::createAsteroid(int asteroidLevel) {
+Asteroid Asteroid::createAsteroid(int asteroidLevel, float asteroidX, float asteroidY) {
     Asteroid newAsteroid;
 
     newAsteroid.level = asteroidLevel;
-    newAsteroid.x = Utils::randomFloat(0.0f, Constants::SCREEN_WIDTH);
-    newAsteroid.y = Utils::randomFloat(0.0f, Constants::SCREEN_HEIGHT);
+    newAsteroid.x = asteroidX;
+    newAsteroid.y = asteroidY;
     newAsteroid.dx = Utils::randomFloat(-Constants::ASTEROID_SPEED, Constants::ASTEROID_SPEED);
     newAsteroid.dy = Utils::randomFloat(-Constants::ASTEROID_SPEED, Constants::ASTEROID_SPEED);
     newAsteroid.radius = newAsteroid.level * 10.0f;

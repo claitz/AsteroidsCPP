@@ -5,12 +5,18 @@
 #include <algorithm>
 
 GameState::GameState(): spaceship(*this) {
-    spawnInitialAsteroids();
+
+    spawnAsteroids(Constants::ASTEROID_COUNT);
+
 }
 
-void GameState::spawnInitialAsteroids() {
-    for (int i = 0; i < Constants::ASTEROID_COUNT; ++i) {
-        Asteroid asteroid = Asteroid::createAsteroid(Constants::ASTEROID_LEVELS);
+void GameState::spawnAsteroids(int count) {
+    for (int i = 0; i < count; ++i) {
+
+        float asteroidX = GetRandomValue(0, GetScreenWidth());
+        float asteroidY = GetRandomValue(0, GetScreenHeight());
+
+        Asteroid asteroid = Asteroid::createAsteroid(Constants::ASTEROID_LEVELS, asteroidX, asteroidY);
         asteroids.push_back(asteroid);
     }
 }
@@ -73,33 +79,52 @@ void GameState::checkBulletCollisions() {
 }
 
 void GameState::renderHUD() const {
-    const int fontSize = 20;
-    const int fontSpacing = 10;
+    const int fontSize = Constants::FONT_SIZE;
+    const int fontSpacing = Constants::FONT_SPACING;
+    const int fontSizeLarge = Constants::FONT_SIZE_LARGE;
+    const Color fontColor = Constants::FONT_COLOR;
 
     // Score
     std::string scoreText = "Score: " + std::to_string(score);
-    DrawText(scoreText.c_str(), fontSpacing, fontSpacing, fontSize, WHITE);
+    DrawText(scoreText.c_str(), fontSpacing, fontSpacing, fontSize, fontColor);
 
     // Lives
     std::string livesText = "Lives: " + std::to_string(lives);
     int livesTextWidth = MeasureText(livesText.c_str(), fontSize);
-    DrawText(livesText.c_str(), GetScreenWidth() - livesTextWidth - fontSpacing, fontSpacing, fontSize, WHITE);
+    DrawText(livesText.c_str(), GetScreenWidth() - livesTextWidth - fontSpacing, fontSpacing, fontSize, fontColor);
 
     // Level
     std::string levelText = "Level: " + std::to_string(level);
     int levelTextWidth = MeasureText(levelText.c_str(), fontSize);
-    DrawText(levelText.c_str(), GetScreenWidth() / 2 - levelTextWidth / 2, fontSpacing, fontSize, WHITE);
+    DrawText(levelText.c_str(), GetScreenWidth() / 2 - levelTextWidth / 2, fontSpacing, fontSize, fontColor);
+
+    // Game Over
+    if (bGameOver){
+        std::string gameOverText = "GAME OVER";
+        int gameOverTextWidth = MeasureText(gameOverText.c_str(), fontSizeLarge);
+        DrawText(gameOverText.c_str(), GetScreenWidth() / 2 - gameOverTextWidth / 2, GetScreenHeight() / 2, fontSizeLarge, fontColor);
+    }
 }
 
 void GameState::removeInactive() {
 
+    // Remove destroyed bullets
     bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
                                  [](const Bullet& bullet) { return bullet.bDestroyed; }),
                   bullets.end());
 
-    asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(),
-                                   [](const Asteroid& asteroid) { return asteroid.bDestroyed; }),
-                    asteroids.end());
+    // Remove destroyed asteroids and spawn new ones
+    std::vector<Asteroid> newAsteroids;
+    for (auto it = asteroids.begin(); it != asteroids.end();) {
+        if (it->bDestroyed) {
+            auto subdividedAsteroids = subdivideAsteroid(*it);
+            newAsteroids.insert(newAsteroids.end(), subdividedAsteroids.begin(), subdividedAsteroids.end());
+            it = asteroids.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    asteroids.insert(asteroids.end(), newAsteroids.begin(), newAsteroids.end());
 }
 
 void GameState::addScore(int enemyLevel) {
@@ -111,3 +136,19 @@ void GameState::respawnSpaceship() {
     spaceship.velocity = {0.0f, 0.0f};
     spaceship.bDestroyed = false;
 }
+
+std::vector<Asteroid> GameState::subdivideAsteroid(Asteroid &parentAsteroid) {
+    std::vector<Asteroid> newAsteroids;
+    if (parentAsteroid.level > 1) {
+        for (int i = 0; i < 2; ++i) {
+            Asteroid asteroid = Asteroid::createAsteroid(parentAsteroid.level - 1, parentAsteroid.x, parentAsteroid.y);
+            newAsteroids.push_back(asteroid);
+        }
+    }
+    return newAsteroids;
+}
+
+void GameState::endGame() {
+    bGameOver = true;
+}
+
