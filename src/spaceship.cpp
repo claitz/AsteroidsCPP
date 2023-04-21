@@ -52,7 +52,7 @@ void Spaceship::update() {
 }
 
 void Spaceship::draw() {
-    if (bDestroyed || gameState.currentState == GameStateType::GameOver) return;
+    if (bDestroyed) return;
 
     auto transformedPoints = shapePoints;
 
@@ -91,7 +91,7 @@ void Spaceship::die() {
 }
 
 void Spaceship::shoot() {
-    if (bDestroyed || gameState.currentState == GameStateType::GameOver) return;
+    if (bDestroyed) return;
 
     Bullet bullet;
 

@@ -24,7 +24,7 @@ namespace Constants {
     const int ENEMY_BASE_SCORE = 100;
 
     // Asteroids
-    const int ASTEROID_COUNT = 10;
+    const int ASTEROID_COUNT = 5;
     const int ASTEROID_LEVELS = 3;
     const float ASTEROID_SPEED = 1.5f;
     const int ASTEROID_POINTS = 8;

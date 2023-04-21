@@ -65,6 +65,10 @@ void GameState::updateInGame() {
     removeInactive();
 
     renderInGame();
+
+    if (asteroids.empty()) {
+        nextLevel();
+    }
 }
 
 void GameState::updateGameOver() {
@@ -127,7 +131,6 @@ void GameState::renderMainMenu() const{
     const int fontSize = Constants::FONT_SIZE_LARGE;
     const int fontSpacing = Constants::FONT_SPACING;
     const Color fontColor = Constants::FONT_COLOR;
-
 
     // Title
     std::string titleText = "Asteroids";
@@ -203,10 +206,13 @@ void GameState::startGame() {
 }
 
 void GameState::nextLevel() {
-
+    ++level;
+    spawnAsteroids(Constants::ASTEROID_COUNT * level);
 }
 
 void GameState::endGame() {
     currentState = GameStateType::GameOver;
+    bullets.clear();
+    asteroids.clear();
 }
 

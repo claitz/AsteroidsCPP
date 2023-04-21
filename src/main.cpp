@@ -16,22 +16,24 @@ int main() {
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Input
-        if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-            gameState.spaceship.rotationDirection = -1.0f;
-        } else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-            gameState.spaceship.rotationDirection = 1.0f;
-        } else {
-            gameState.spaceship.rotationDirection = 0.0f;
-        }
+        if (gameState.currentState == GameStateType::InGame){
+            if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
+                gameState.spaceship.rotationDirection = -1.0f;
+            } else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
+                gameState.spaceship.rotationDirection = 1.0f;
+            } else {
+                gameState.spaceship.rotationDirection = 0.0f;
+            }
 
-        if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-            gameState.spaceship.setThrust(true);
-        } else {
-            gameState.spaceship.setThrust(false);
-        }
+            if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
+                gameState.spaceship.setThrust(true);
+            } else {
+                gameState.spaceship.setThrust(false);
+            }
 
-        if (IsKeyPressed(KEY_SPACE)) {
-            gameState.spaceship.shoot();
+            if (IsKeyPressed(KEY_SPACE)) {
+                gameState.spaceship.shoot();
+            }
         }
 
         // Call the update function on the game state
