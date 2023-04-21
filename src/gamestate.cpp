@@ -109,7 +109,7 @@ void GameState::checkBulletCollisions() {
 
 void GameState::renderInGame() const {
     const int fontSize = Constants::FONT_SIZE;
-    const int fontSpacing = Constants::FONT_SPACING;
+    const int fontSpacing = GetScreenHeight() / 50;
     const Color fontColor = Constants::FONT_COLOR;
 
     // Score
@@ -128,14 +128,14 @@ void GameState::renderInGame() const {
 }
 
 void GameState::renderMainMenu() const{
-    const int fontSize = Constants::FONT_SIZE_LARGE;
-    const int fontSpacing = Constants::FONT_SPACING;
+    const int fontSize = Constants::FONT_SIZE_LARGE * 2;
+    const int topMargin = GetScreenHeight() / 10;
     const Color fontColor = Constants::FONT_COLOR;
 
     // Title
     std::string titleText = "Asteroids";
     int titleTextWidth = MeasureText(titleText.c_str(), fontSize);
-    DrawText(titleText.c_str(), GetScreenWidth() / 2 - titleTextWidth / 2, fontSpacing, fontSize, fontColor);
+    DrawText(titleText.c_str(), GetScreenWidth() / 2 - titleTextWidth / 2, topMargin, fontSize, fontColor);
 
     // Start
     std::string instructionsText = "Press ENTER to start";
@@ -145,12 +145,12 @@ void GameState::renderMainMenu() const{
 
 void GameState::renderGameOver() const{
     const int fontSize = Constants::FONT_SIZE_LARGE;
-    const int fontSpacing = Constants::FONT_SPACING * 5;
+    const int topMargin = GetScreenHeight() / 10;
     const Color fontColor = Constants::FONT_COLOR;
 
     std::string gameOverText = "GAME OVER";
     int gameOverTextWidth = MeasureText(gameOverText.c_str(), fontSize);
-    DrawText(gameOverText.c_str(), GetScreenWidth() / 2 - gameOverTextWidth / 2, GetScreenHeight() / 2 - fontSpacing, fontSize, fontColor);
+    DrawText(gameOverText.c_str(), GetScreenWidth() / 2 - gameOverTextWidth / 2, GetScreenHeight() / 2 - topMargin, fontSize, fontColor);
 
     // Start
     std::string instructionsText = "Press ENTER to restart";

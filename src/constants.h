@@ -32,7 +32,6 @@ namespace Constants {
 
     // HUD
     const int FONT_SIZE = 20;
-    const int FONT_SPACING = 10;
     const Color FONT_COLOR = RAYWHITE;
 
     const int FONT_SIZE_LARGE = 50;
