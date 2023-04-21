@@ -12,7 +12,7 @@ namespace Constants {
 
     // Spaceship
     const float SPACESHIP_SPEED = 100.f;
-    const float SPACESHIP_ROT_SPEED = 10.f;
+    const float SPACESHIP_ROT_SPEED = 100.f;
 
     // Bullets
     const float BULLET_SPEED = 0.01f;
@@ -21,7 +21,7 @@ namespace Constants {
     // Asteroids
     const int ASTEROID_COUNT = 5;
     const int ASTEROID_LEVELS = 3;
-    const float ASTEROID_SPEED = 0.01f;
+    const float ASTEROID_SPEED = 1.5f;
     const int ASTEROID_POINTS = 8;
 
 

@@ -43,15 +43,19 @@ void Asteroid::update(Spaceship& spaceship) {
 }
 
 void Asteroid::draw() {
-//    std::vector<Vector2> translated_points = points;
-//    for (Vector2& point : translated_points) {
-//        point.x += x;
-//        point.y += y;
-//    }
-//    translated_points.push_back(translated_points[0]);
+
+   // TraceLog(LOG_INFO, "Drawing asteroid at (%f, %f) with %d points", x, y, points.size());
+    if (points.empty()) return;
+
+    std::vector<Vector2> translated_points = points;
+    for (Vector2& point : translated_points) {
+        point.x += x;
+        point.y += y;
+    }
+    translated_points.push_back(translated_points[0]);
 
     Color color = RAYWHITE;
-    //DrawLineStrip(translated_points.data(), translated_points.size(), color);
+    DrawLineStrip(translated_points.data(), translated_points.size(), color);
 }
 
 bool Asteroid::collidesWith(Spaceship& spaceship) {

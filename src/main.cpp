@@ -17,13 +17,11 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Asteroids");
 
     // Create a spaceship
-    Spaceship spaceship;
-    spaceship.createSpaceship();
+    Spaceship spaceship = Spaceship::createSpaceship();
 
     // Create starting asteroids
     for (int i = 0; i < Constants::ASTEROID_COUNT; ++i) {
-        Asteroid asteroid;
-        asteroid.createAsteroid(Constants::ASTEROID_LEVELS);
+        Asteroid asteroid = Asteroid::createAsteroid(Constants::ASTEROID_LEVELS);
         asteroids.push_back(asteroid);
     }
 
@@ -34,9 +32,9 @@ int main() {
     {
         // Input
         if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-            spaceship.rotationDirection -= 1.0f;
+            spaceship.rotationDirection = -1.0f;
         } else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-            spaceship.rotationDirection += 1.0f;
+            spaceship.rotationDirection = 1.0f;
         } else {
             spaceship.rotationDirection = 0.0f;
         }
