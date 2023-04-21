@@ -1,11 +1,10 @@
 #include "bullet.h"
 #include <cmath>
 
-void Bullet::createBullet(float startX, float startY, float angle, float startSpeed, float startLifetime) {
+void Bullet::createBullet(float startX, float startY, float angle, float startSpeed) {
     x = startX;
     y = startY;
     speed = startSpeed;
-    lifetime = startLifetime;
 
     float radAngle = (angle + 90) * PI / 180.0f;
     dx = -cos(radAngle) * speed;
@@ -19,5 +18,5 @@ void Bullet::update() {
 }
 
 void Bullet::draw() {
-    DrawCircle(x, y, 2, RAYWHITE);
+    DrawCircle(x, y, radius, color);
 }

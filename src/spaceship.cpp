@@ -76,7 +76,7 @@ void Spaceship::shoot() {
 
     Bullet bullet;
 
-    bullet.createBullet(position.x, position.y, angle, Constants::BULLET_SPEED, Constants::BULLET_LIFETIME);
+    bullet.createBullet(position.x, position.y, angle, Constants::BULLET_SPEED);
     bullets.push_back(bullet);
 }
 

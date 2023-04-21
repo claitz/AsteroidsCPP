@@ -17,6 +17,8 @@ namespace Constants {
     // Bullets
     const float BULLET_SPEED = 5.f;
     const float BULLET_LIFETIME = 5.f;
+    const float BULLET_RADIUS = 2.f;
+    const Color BULLET_COLOR = RED;
 
     // Asteroids
     const int ASTEROID_COUNT = 5;
