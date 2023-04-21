@@ -39,13 +39,13 @@ void Asteroid::update(Spaceship& spaceship) {
     y += dy;
 
     // Wrap around screen edges
-    if (x < -radius) x += Constants::SCREEN_WIDTH + radius * 2;
-    if (x > Constants::SCREEN_WIDTH + radius) x -= Constants::SCREEN_WIDTH + radius * 2;
-    if (y < -radius) y += Constants::SCREEN_HEIGHT + radius * 2;
-    if (y > Constants::SCREEN_HEIGHT + radius) y -= Constants::SCREEN_HEIGHT + radius * 2;
+    if (x < -radius) x += static_cast<float>(GetScreenWidth()) + radius * 2;
+    if (x > static_cast<float>(GetScreenWidth()) + radius) x -= static_cast<float>(GetScreenWidth()) + radius * 2;
+    if (y < -radius) y += static_cast<float>(GetScreenHeight()) + radius * 2;
+    if (y > static_cast<float>(GetScreenHeight()) + radius) y -= static_cast<float>(GetScreenHeight()) + radius * 2;
 }
 
-void Asteroid::draw() {
+void Asteroid::draw() const {
     if (points.empty()) return;
 
     std::vector<Vector2> translated_points = points;

@@ -9,7 +9,7 @@ public:
     static Asteroid createAsteroid(int asteroidLevel, float asteroidX, float asteroidY);
 
     void update(Spaceship& spaceship);
-    void draw();
+    void draw() const;
 
     int level = 0;
     float x = 0.0f, y = 0.0f;

@@ -5,10 +5,7 @@
 int main() {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = Constants::SCREEN_WIDTH;
-    int screenHeight = Constants::SCREEN_HEIGHT;
-
-    InitWindow(screenWidth, screenHeight, "Asteroids");
+    InitWindow(Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, "Asteroids");
 
     // Create a game state
     GameState gameState;

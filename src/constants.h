@@ -7,8 +7,9 @@ namespace Constants {
 
     // Spaceship
     const int STARTING_LIVES = 3;
-    const float SPACESHIP_SPEED = 100.f;
+    const float SPACESHIP_SPEED = 120.f;
     const float SPACESHIP_ROT_SPEED = 100.f;
+    const float SPACESHIP_RADIUS = 10.f;
     const Color SPACESHIP_COLOR = RAYWHITE;
 
     // Bullets

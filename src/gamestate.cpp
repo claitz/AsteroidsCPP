@@ -13,10 +13,10 @@ GameState::GameState(): spaceship(*this) {
 void GameState::spawnAsteroids(int count) {
     for (int i = 0; i < count; ++i) {
 
-        float asteroidX = GetRandomValue(0, GetScreenWidth());
-        float asteroidY = GetRandomValue(0, GetScreenHeight());
+        auto asteroidX = GetRandomValue(0, GetScreenWidth());
+        auto asteroidY = GetRandomValue(0, GetScreenHeight());
 
-        Asteroid asteroid = Asteroid::createAsteroid(Constants::ASTEROID_LEVELS, asteroidX, asteroidY);
+        Asteroid asteroid = Asteroid::createAsteroid(Constants::ASTEROID_LEVELS, static_cast<float>(asteroidX), static_cast<float>(asteroidY));
         asteroids.push_back(asteroid);
     }
 }

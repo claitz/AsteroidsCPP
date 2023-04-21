@@ -17,6 +17,6 @@ void Bullet::update() {
     lifetime -= GetFrameTime();
 }
 
-void Bullet::draw() {
+void Bullet::draw() const {
     DrawCircle(x, y, radius, color);
 }
