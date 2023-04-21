@@ -28,12 +28,22 @@ endif()
 file(GLOB SOURCES "src/*.cpp" "src/*.h")
 
 # Create the executable
-add_executable(Asteroids ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 #set(raylib_VERBOSE 1)
+
+# Link raylib
 if(UNIX)
-    target_link_libraries(Asteroids raylib)
+    target_link_libraries(${PROJECT_NAME} raylib)
 else()
-    target_link_libraries(Asteroids raylib winmm)
+    target_link_libraries(${PROJECT_NAME} raylib winmm)
+
+    # Static link on Windows
+    set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
+
+    # Hide console window on Windows Release builds
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-mwindows")
+    endif()
 endif(UNIX)
 
 # Web Configurations

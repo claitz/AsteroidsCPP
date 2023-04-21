@@ -34,7 +34,7 @@
 
 # User-specific stuff:
 /.idea/
-/cmake-build-debug*/
+/cmake-build-*/
 
 ## File-based project format:
 *.iws
