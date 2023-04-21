@@ -10,7 +10,6 @@ public:
 
     void update(Spaceship& spaceship);
     void draw();
-    bool collidesWith(Spaceship& spaceship);
 
     int level = 0;
     float x = 0.0f, y = 0.0f;

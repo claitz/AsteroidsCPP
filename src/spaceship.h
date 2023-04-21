@@ -22,15 +22,15 @@ public:
     void shoot();
 
     int lives = Constants::STARTING_LIVES;
-    Vector2 velocity;
-    Vector2 position;
-    float angle;
-    float radius;
+    Vector2 velocity{};
+    Vector2 position{};
+    float angle{};
+    float radius{};
 
-    bool bThrust;
-    float speed;
-    float rotationSpeed;
-    float rotationDirection;
+    bool bThrust{};
+    float speed{};
+    float rotationSpeed{};
+    float rotationDirection{};
 
     std::vector<Vector2> shapePoints;
 };

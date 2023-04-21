@@ -13,4 +13,10 @@ public:
     GameState();
 
     void update();
+
+    void checkCollisions();
+
+    void checkAsteroidCollisions();
+
+    void checkBulletCollisions();
 };

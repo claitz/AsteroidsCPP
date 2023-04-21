@@ -42,13 +42,6 @@ void Spaceship::move() {
 
 void Spaceship::update() {
     move();
-    for (Bullet& bullet : gameState.bullets) {
-        bullet.update();
-    }
-
-    gameState.bullets.erase(std::remove_if(gameState.bullets.begin(), gameState.bullets.end(),
-                                 [](const Bullet& bullet) { return bullet.lifetime <= 0; }),
-                            gameState.bullets.end());
 }
 
 void Spaceship::draw() {

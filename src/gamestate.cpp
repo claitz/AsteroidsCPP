@@ -17,6 +17,47 @@ void GameState::update() {
         asteroid.draw();
     }
 
+    for (size_t i = 0; i < bullets.size();) {
+        Bullet &bullet = bullets[i];
+        bullet.update();
+        bullet.draw();
+
+        if (bullet.lifetime <= 0) {
+            bullets.erase(bullets.begin() + i);
+        } else {
+            ++i;
+        }
+    }
+
     spaceship.update();
     spaceship.draw();
+
+    checkCollisions();
+}
+
+void GameState::checkCollisions() {
+    checkAsteroidCollisions();
+    checkBulletCollisions();
+}
+
+void GameState::checkAsteroidCollisions() {
+    for (Asteroid &asteroid : asteroids) {
+        bool bCollision = CheckCollisionCircles({asteroid.x, asteroid.y}, asteroid.radius, spaceship.position, spaceship.radius);
+
+        if (bCollision) {
+            spaceship.die();
+        }
+    }
+}
+
+void GameState::checkBulletCollisions() {
+    for (Bullet &bullet : bullets) {
+        for (Asteroid &asteroid : asteroids) {
+            bool bCollision = CheckCollisionCircles({asteroid.x, asteroid.y}, asteroid.radius, {bullet.x, bullet.y}, bullet.radius);
+
+            if (bCollision) {
+                TraceLog(LOG_INFO, "Bullet hit asteroid");
+            }
+        }
+    }
 }

@@ -43,10 +43,6 @@ void Asteroid::update(Spaceship& spaceship) {
     if (x > Constants::SCREEN_WIDTH + radius) x -= Constants::SCREEN_WIDTH + radius * 2;
     if (y < -radius) y += Constants::SCREEN_HEIGHT + radius * 2;
     if (y > Constants::SCREEN_HEIGHT + radius) y -= Constants::SCREEN_HEIGHT + radius * 2;
-
-    if (collidesWith(spaceship)) {
-        spaceship.die();
-    }
 }
 
 void Asteroid::draw() {
@@ -63,8 +59,4 @@ void Asteroid::draw() {
 
     Color color = RAYWHITE;
     DrawLineStrip(translated_points.data(), translated_points.size(), color);
-}
-
-bool Asteroid::collidesWith(Spaceship& spaceship) {
-    return CheckCollisionCircles({x, y}, radius, spaceship.position, spaceship.radius);
 }
