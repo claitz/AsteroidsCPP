@@ -5,9 +5,9 @@
 
 void Spaceship::createSpaceship(Spaceship &spaceship) {
 
-    spaceship.position = { Constants::SCREEN_WIDTH / 2.0f, Constants::SCREEN_HEIGHT / 2.0f };
+    spaceship.position = { static_cast<float>(GetScreenWidth()) / 2.0f, static_cast<float>(GetScreenHeight()) / 2.0f };
     spaceship.speed = Constants::SPACESHIP_SPEED;
-    spaceship.radius = 10.0f;
+    spaceship.radius = Constants::SPACESHIP_RADIUS;
     spaceship.velocity = { 0.0f, 0.0f };
     spaceship.rotationDirection = 0.0f;
     spaceship.rotationSpeed = Constants::SPACESHIP_ROT_SPEED;
@@ -32,13 +32,19 @@ void Spaceship::move() {
     if (bThrust) {
         float radAngle = (angle - 90.0f) * PI / 180.0f; // Subtract 90.0f from the angle
         Vector2 thrustDirection = { cos(radAngle), sin(radAngle) };
-        velocity = Vector2Scale(thrustDirection, speed);
-    } else {
-        velocity = {0, 0};
+        Vector2 thrustForce = Vector2Scale(thrustDirection, speed * GetFrameTime());
+        velocity = Vector2Add(velocity, thrustForce);
     }
 
     position = Vector2Add(position, Vector2Scale(velocity, GetFrameTime()));
+
+    // Wrap the spaceship around the screen edges
+    if (position.x < 0) position.x += static_cast<float>(GetScreenWidth());
+    if (position.y < 0) position.y += static_cast<float>(GetScreenHeight());
+    if (position.x >= static_cast<float>(GetScreenWidth())) position.x -= static_cast<float>(GetScreenWidth());
+    if (position.y >= static_cast<float>(GetScreenHeight())) position.y -= static_cast<float>(GetScreenHeight());
 }
+
 
 
 void Spaceship::update() {
