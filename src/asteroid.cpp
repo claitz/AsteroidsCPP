@@ -2,29 +2,29 @@
 #include "constants.h"
 #include "utils.h"
 #include "spaceship.h"
-#include "SDL.h"
 
 Asteroid Asteroid::createAsteroid(int asteroidLevel) {
+    Asteroid newAsteroid;
 
-    level = asteroidLevel;
-    x = Utils::randomFloat(0.0f, Constants::SCREEN_WIDTH);
-    y = Utils::randomFloat(0.0f, Constants::SCREEN_HEIGHT);
-    dx = Utils::randomFloat(-Constants::ASTEROID_SPEED, Constants::ASTEROID_SPEED);
-    dy = Utils::randomFloat(-Constants::ASTEROID_SPEED, Constants::ASTEROID_SPEED);
-    radius = level * 10.0f;
+    newAsteroid.level = asteroidLevel;
+    newAsteroid.x = Utils::randomFloat(0.0f, Constants::SCREEN_WIDTH);
+    newAsteroid.y = Utils::randomFloat(0.0f, Constants::SCREEN_HEIGHT);
+    newAsteroid.dx = Utils::randomFloat(-Constants::ASTEROID_SPEED, Constants::ASTEROID_SPEED);
+    newAsteroid.dy = Utils::randomFloat(-Constants::ASTEROID_SPEED, Constants::ASTEROID_SPEED);
+    newAsteroid.radius = newAsteroid.level * 10.0f;
 
-    float angleStep = 2.0f * M_PI / Constants::ASTEROID_POINTS;
+    float angleStep = 2.0f * PI / Constants::ASTEROID_POINTS;
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dist(0.5f, 1.5f);
 
     for (int i = 0; i < Constants::ASTEROID_POINTS; ++i) {
-        float randomRadius = radius * dist(gen);
-        points.push_back({static_cast<float>(cos(angleStep * i) * randomRadius),static_cast<float>(-sin(angleStep * i) * randomRadius) });
+        float randomRadius = newAsteroid.radius * dist(gen);
+        newAsteroid.points.push_back({static_cast<float>(cos(angleStep * i) * randomRadius), static_cast<float>(-sin(angleStep * i) * randomRadius) });
     }
 
-    return {level, x, y, dx, dy, radius, points };
+    return newAsteroid;
 }
 
 void Asteroid::update(Spaceship& spaceship) {
@@ -42,22 +42,19 @@ void Asteroid::update(Spaceship& spaceship) {
     }
 }
 
-void Asteroid::draw(SDL_Renderer *renderer) {
+void Asteroid::draw() {
+//    std::vector<Vector2> translated_points = points;
+//    for (Vector2& point : translated_points) {
+//        point.x += x;
+//        point.y += y;
+//    }
+//    translated_points.push_back(translated_points[0]);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_FPoint center = {x, y};
-
-    std::vector<SDL_FPoint> translated_points = points;
-    for (SDL_FPoint& point : translated_points) {
-        point.x += center.x;
-        point.y += center.y;
-    }
-    translated_points.push_back(translated_points[0]);
-
-    SDL_RenderDrawLinesF(renderer, translated_points.data(), translated_points.size());
+    Color color = RAYWHITE;
+    //DrawLineStrip(translated_points.data(), translated_points.size(), color);
 }
 
-bool Asteroid::collidesWith(Spaceship &spaceship) {
+bool Asteroid::collidesWith(Spaceship& spaceship) {
     float dx = x - spaceship.x;
     float dy = y - spaceship.y;
     float distance = std::sqrt(dx * dx + dy * dy);

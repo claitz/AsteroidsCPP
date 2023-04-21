@@ -2,13 +2,29 @@ cmake_minimum_required(VERSION 3.25)
 project(Asteroids)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_GENERATOR_PLATFORM x64)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+if (UNIX)
+    set(RAYLIB_PATH "/home/clait/raylib")
+else()
+    set(RAYLIB_PATH "E:/CPP/Libraries/raylib64")
+endif (UNIX)
 
-set(SDL2_PATH "E:\\CPP\\Libraries\\SDL2-mingw")
-include_directories(${SDL2_PATH}/include)
-link_directories(${SDL2_PATH}/lib)
+# Include raylib headers
+include_directories(${RAYLIB_PATH}/include)
 
-add_executable(Asteroids src/main.cpp src/asteroid.cpp src/asteroid.h src/constants.h src/utils.h src/spaceship.cpp src/spaceship.h)
+# Link raylib library
+link_directories(${RAYLIB_PATH}/lib)
 
-target_link_libraries(Asteroids SDL2 SDL2main)
+# Add source files
+file(GLOB SOURCES "src/*.cpp" "src/*.h")
+
+# Create the executable
+add_executable(Asteroids ${SOURCES})
+
+# Link the raylib library
+if(UNIX)
+    target_link_libraries(Asteroids raylib)
+else()
+    target_link_libraries(Asteroids raylib winmm)
+endif(UNIX)

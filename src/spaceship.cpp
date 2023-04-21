@@ -1,41 +1,67 @@
 #include "spaceship.h"
-#include "constants.h"
-#include "SDL.h"
 #include <cmath>
 #include <iostream>
 
 Spaceship Spaceship::createSpaceship() {
-    lives = Constants::STARTING_LIVES;
-    x = Constants::STARTING_POSITION_X;
-    y = Constants::STARTING_POSITION_Y;
-    angle = 0.f;
-    speed = Constants::SPACESHIP_SPEED;
-    radius = 10.0f;
 
-    return {lives, x, y, angle, speed};
+    Spaceship newSpaceship;
+
+    newSpaceship.x = Constants::STARTING_POSITION_X;
+    newSpaceship.y = Constants::STARTING_POSITION_Y;
+
+    return newSpaceship;
 }
 
 void Spaceship::update() {
-//    const std::string debug = "X: " + std::to_string(x) + " Y: " + std::to_string(y);
-//    std::cout << debug << std::endl;
+
+    move();
+
+    for (Bullet& bullet : bullets) {
+        bullet.update();
+    }
+
+    bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
+                                 [](const Bullet& bullet) { return bullet.lifetime <= 0; }),
+                  bullets.end());
 }
 
-void Spaceship::draw(SDL_Renderer *renderer) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+void Spaceship::move() {
+    angle += rotationDirection * rotationSpeed * GetFrameTime();
 
-    float radAngle = angle * M_PI / 180.0f;
-    SDL_FPoint points[] = {
-            { static_cast<float>(x + cos(radAngle) * 10), static_cast<float>(y - sin(radAngle) * 10) },
-            { static_cast<float>(x + cos(radAngle + M_PI * 2 / 3) * 10), static_cast<float>(y - sin(radAngle + M_PI * 2 / 3) * 10) },
-            { static_cast<float>(x + cos(radAngle + M_PI * 4 / 3) * 10), static_cast<float>(y - sin(radAngle + M_PI * 4 / 3) * 10) },
-            { static_cast<float>(x + cos(radAngle) * 10), static_cast<float>(y - sin(radAngle) * 10) },
-    };
+    if (bThrust) {
+        float radAngle = (angle + 90.0f) * PI / 180.0f; // Subtract 90.0f from the angle
+        x -= cos(radAngle) * speed * GetFrameTime();
+        y -= sin(radAngle) * speed * GetFrameTime();
+    }
+}
 
-    SDL_RenderDrawLinesF(renderer, points, 4);
+void Spaceship::draw() {
+    auto transformedPoints = shapePoints;
+
+    // Apply rotation transformationw
+    float radAngle = angle * PI / 180.0f;
+    for (auto& point : transformedPoints) {
+        float newX = point.x * cos(radAngle) - point.y * sin(radAngle);
+        float newY = point.x * sin(radAngle) + point.y * cos(radAngle);
+        point.x = newX;
+        point.y = newY;
+    }
+
+    // Apply translation transformation
+    for (auto& point : transformedPoints) {
+        point.x += x;
+        point.y += y;
+    }
+
+    Color color = RAYWHITE;
+    DrawTriangleLines(transformedPoints[0], transformedPoints[1], transformedPoints[2], color);
+
+    for (Bullet& bullet : bullets) {
+        bullet.draw();
+    }
 }
 
 void Spaceship::die() {
-
     if (lives > 0) {
         lives--;
         respawn();
@@ -49,6 +75,18 @@ void Spaceship::respawn() {
     x = Constants::STARTING_POSITION_X;
     y = Constants::STARTING_POSITION_Y;
     angle = 0.f;
+}
+
+void Spaceship::shoot() {
+    std::cout << "Shoot" << std::endl;
+    float margin = 5.0f;
+    float radAngle = angle * PI / 180.0f;
+    float bulletStartX = x + cos(radAngle) * (radius + margin);
+    float bulletStartY = y - sin(radAngle) * (radius + margin);
+
+    Bullet bullet;
+    bullet.createBullet(bulletStartX, bulletStartY, angle, Constants::BULLET_SPEED, Constants::BULLET_LIFETIME);
+    bullets.push_back(bullet);
 }
 
 

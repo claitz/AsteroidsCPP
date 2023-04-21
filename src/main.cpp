@@ -1,5 +1,4 @@
-#define SDL_MAIN_HANDLED
-#include "SDL.h"
+#include "raylib.h"
 #include "constants.h"
 #include "asteroid.h"
 #include "spaceship.h"
@@ -9,29 +8,13 @@
 // Globals
 std::vector<Asteroid> asteroids;
 
-int main(int argc, char* argv[]) {
-#pragma region SDL Setup
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-        return 1;
-    }
+int main() {
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    int screenWidth = Constants::SCREEN_WIDTH;
+    int screenHeight = Constants::SCREEN_HEIGHT;
 
-    // Create a window
-    SDL_Window* window = SDL_CreateWindow("Asteroids", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants::SCREEN_WIDTH,Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    if (!window) {
-        SDL_Log("Unable to create window: %s", SDL_GetError());
-        return 1;
-    }
-
-    // Create a renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer) {
-        SDL_Log("Unable to create renderer: %s", SDL_GetError());
-        return 1;
-    }
-
-#pragma endregion SDL Setup
+    InitWindow(screenWidth, screenHeight, "Asteroids");
 
     // Create a spaceship
     Spaceship spaceship;
@@ -40,61 +23,57 @@ int main(int argc, char* argv[]) {
     // Create starting asteroids
     for (int i = 0; i < Constants::ASTEROID_COUNT; ++i) {
         Asteroid asteroid;
-
         asteroid.createAsteroid(Constants::ASTEROID_LEVELS);
         asteroids.push_back(asteroid);
     }
 
-    // Game loop
-    bool running = true;
-    SDL_Event event;
+    SetTargetFPS(60);               // Set the desired frame rate
 
-    while (running) {
-        // Event loop
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = false;
-            }
-        }
-
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
         // Input
-        const Uint8* keyboardState = SDL_GetKeyboardState(nullptr);
-        if (keyboardState[SDL_SCANCODE_LEFT] || keyboardState[SDL_SCANCODE_A]) {
-            spaceship.angle += 0.05f;
-        }
-        if (keyboardState[SDL_SCANCODE_RIGHT] || keyboardState[SDL_SCANCODE_D]) {
-            spaceship.angle -= 0.05f;
-        }
-        if (keyboardState[SDL_SCANCODE_UP] || keyboardState[SDL_SCANCODE_W]) {
-            float radAngle = spaceship.angle * M_PI / 180.0f;
-            spaceship.x += cos(radAngle) * spaceship.speed;
-            spaceship.y -= sin(radAngle) * spaceship.speed;
+        if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
+            spaceship.rotationDirection -= 1.0f;
+        } else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
+            spaceship.rotationDirection += 1.0f;
+        } else {
+            spaceship.rotationDirection = 0.0f;
         }
 
-        // Clear the screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+        if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
+            spaceship.bThrust = true;
+        } else {
+            spaceship.bThrust = false;
+        }
 
-        // Update game state
+        if (IsKeyPressed(KEY_SPACE)) {
+            spaceship.shoot();
+        }
 
-        // Asteroids
-        for (Asteroid& asteroid : asteroids) {
+        // Draw
+        //----------------------------------------------------------------------------------
+
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+        // Draw game elements (e.g., spaceship and asteroids)
+        for (Asteroid &asteroid: asteroids) {
             asteroid.update(spaceship);
-            asteroid.draw(renderer);
+            asteroid.draw();
         }
 
-        // Spaceship
         spaceship.update();
-        spaceship.draw(renderer);
+        spaceship.draw();
 
-        // Present the rendered frame
-        SDL_RenderPresent(renderer);
+        EndDrawing();
+        //----------------------------------------------------------------------------------
     }
 
-    // Clean up
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
 
     return 0;
 }

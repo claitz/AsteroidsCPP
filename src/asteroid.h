@@ -1,24 +1,20 @@
 #pragma once
+#include "raylib.h"
 #include <vector>
-
-class SDL_Renderer;
-class SDL_FPoint;
-class Spaceship;
+#include "spaceship.h"
 
 class Asteroid {
-
 public:
-    int level; // Level
-    float x, y; // Position
-    float dx, dy; // Velocity
-    float radius; // Size
-    std::vector<SDL_FPoint> points; // Points
-
-    Asteroid createAsteroid(int asteroidLevel);
+    static Asteroid createAsteroid(int asteroidLevel);
 
     void update(Spaceship& spaceship);
-
+    void draw();
     bool collidesWith(Spaceship& spaceship);
 
-    void draw(SDL_Renderer* renderer);
+    int level = 0;
+    float x = 0.0f, y = 0.0f;
+    float dx = 0.0f, dy = 0.0f;
+    float radius = 0.0f;
+    std::vector<Vector2> points = {};
+    bool bDestroy = false;
 };
