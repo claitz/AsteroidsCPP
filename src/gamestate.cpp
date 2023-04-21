@@ -2,7 +2,6 @@
 #include "constants.h"
 #include "asteroid.h"
 
-
 GameState::GameState(): spaceship(*this) {
 
     for (int i = 0; i < Constants::ASTEROID_COUNT; ++i) {
@@ -17,7 +16,7 @@ void GameState::update() {
         asteroid.draw();
     }
 
-    for (size_t i = 0; i < bullets.size();) {
+    for (std::size_t i = 0; i < bullets.size();) {
         Bullet &bullet = bullets[i];
         bullet.update();
         bullet.draw();
