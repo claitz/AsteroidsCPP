@@ -2,7 +2,6 @@
 #include "constants.h"
 #include "asteroid.h"
 #include "spaceship.h"
-#include <cmath>
 #include <vector>
 
 // Globals

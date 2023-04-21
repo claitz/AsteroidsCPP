@@ -21,11 +21,17 @@ Asteroid Asteroid::createAsteroid(int asteroidLevel) {
 
     for (int i = 0; i < Constants::ASTEROID_POINTS; ++i) {
         float randomRadius = newAsteroid.radius * dist(gen);
-        newAsteroid.points.push_back({static_cast<float>(cos(angleStep * i) * randomRadius), static_cast<float>(-sin(angleStep * i) * randomRadius) });
+        Vector2 point = { static_cast<float>(cos(angleStep * i) * randomRadius), static_cast<float>(-sin(angleStep * i) * randomRadius) };
+        float distance = Vector2Length(point);
+        if (distance > newAsteroid.radius) {
+            point = Vector2Scale(point, newAsteroid.radius / distance);
+        }
+        newAsteroid.points.push_back(point);
     }
 
     return newAsteroid;
 }
+
 
 void Asteroid::update(Spaceship& spaceship) {
     x += dx;
@@ -59,9 +65,5 @@ void Asteroid::draw() {
 }
 
 bool Asteroid::collidesWith(Spaceship& spaceship) {
-    float dx = x - spaceship.position.x;
-    float dy = y - spaceship.position.y;
-    float distance = std::sqrt(dx * dx + dy * dy);
-
-    return distance < radius + spaceship.radius;
+    return CheckCollisionCircles({x, y}, radius, spaceship.position, spaceship.radius);
 }
