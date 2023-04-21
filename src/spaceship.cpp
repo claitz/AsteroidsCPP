@@ -1,21 +1,25 @@
 #include "spaceship.h"
 #include <cmath>
 #include <iostream>
+#include <raymath.h>
 
 Spaceship Spaceship::createSpaceship() {
 
-    Spaceship newSpaceship;
+    return Spaceship();
+}
 
-    newSpaceship.x = Constants::STARTING_POSITION_X;
-    newSpaceship.y = Constants::STARTING_POSITION_Y;
+void Spaceship::move() {
+    angle += rotationDirection * rotationSpeed * GetFrameTime();
 
-    return newSpaceship;
+    if (bThrust) {
+        float radAngle = (angle - 90.0f) * PI / 180.0f; // Subtract 90.0f from the angle
+        Vector2 velocity = { cos(radAngle), sin(radAngle) };
+        position = Vector2Add(position, Vector2Scale(velocity, speed * GetFrameTime()));
+    }
 }
 
 void Spaceship::update() {
-
     move();
-
     for (Bullet& bullet : bullets) {
         bullet.update();
     }
@@ -25,20 +29,10 @@ void Spaceship::update() {
                   bullets.end());
 }
 
-void Spaceship::move() {
-    angle += rotationDirection * rotationSpeed * GetFrameTime();
-
-    if (bThrust) {
-        float radAngle = (angle + 90.0f) * PI / 180.0f; // Subtract 90.0f from the angle
-        x -= cos(radAngle) * speed * GetFrameTime();
-        y -= sin(radAngle) * speed * GetFrameTime();
-    }
-}
-
 void Spaceship::draw() {
     auto transformedPoints = shapePoints;
 
-    // Apply rotation transformationw
+    // Apply rotation transformation
     float radAngle = angle * PI / 180.0f;
     for (auto& point : transformedPoints) {
         float newX = point.x * cos(radAngle) - point.y * sin(radAngle);
@@ -49,8 +43,7 @@ void Spaceship::draw() {
 
     // Apply translation transformation
     for (auto& point : transformedPoints) {
-        point.x += x;
-        point.y += y;
+        point = Vector2Add(point, position);
     }
 
     Color color = RAYWHITE;
@@ -60,6 +53,7 @@ void Spaceship::draw() {
         bullet.draw();
     }
 }
+
 
 void Spaceship::die() {
     if (lives > 0) {
@@ -72,21 +66,17 @@ void Spaceship::die() {
 }
 
 void Spaceship::respawn() {
-    x = Constants::STARTING_POSITION_X;
-    y = Constants::STARTING_POSITION_Y;
+    position.x = Constants::STARTING_POSITION_X;
+    position.y = Constants::STARTING_POSITION_Y;
     angle = 0.f;
 }
 
 void Spaceship::shoot() {
     std::cout << "Shoot" << std::endl;
-    float margin = 5.0f;
-    float radAngle = angle * PI / 180.0f;
-    float bulletStartX = x + cos(radAngle) * (radius + margin);
-    float bulletStartY = y - sin(radAngle) * (radius + margin);
 
     Bullet bullet;
-    bullet.createBullet(bulletStartX, bulletStartY, angle, Constants::BULLET_SPEED, Constants::BULLET_LIFETIME);
+
+    bullet.createBullet(position.x, position.y, angle, Constants::BULLET_SPEED, Constants::BULLET_LIFETIME);
     bullets.push_back(bullet);
 }
-
 

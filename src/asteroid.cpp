@@ -59,8 +59,8 @@ void Asteroid::draw() {
 }
 
 bool Asteroid::collidesWith(Spaceship& spaceship) {
-    float dx = x - spaceship.x;
-    float dy = y - spaceship.y;
+    float dx = x - spaceship.position.x;
+    float dy = y - spaceship.position.y;
     float distance = std::sqrt(dx * dx + dy * dy);
 
     return distance < radius + spaceship.radius;
