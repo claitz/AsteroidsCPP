@@ -97,7 +97,7 @@ void GameState::updateOptions() {
     }
 
     // Return to the main menu
-    if (IsKeyPressed(KEY_ESCAPE)) {
+    if (IsKeyPressed(KEY_ENTER)) {
         currentState = GameStateType::MainMenu;
     }
 }
@@ -205,6 +205,11 @@ void GameState::renderOptions() {
     decreaseResolutionButton = {static_cast<float>(GetScreenWidth() / 2 - resolutionTextWidth / 2 - fontSize) - buttonMargin, static_cast<float>(margin), static_cast<float>(fontSize), static_cast<float>(fontSize)};
     DrawText(decreaseText.c_str(), decreaseResolutionButton.x, decreaseResolutionButton.y, fontSize, fontColor);
     DrawRectangleLinesEx(decreaseResolutionButton, 2, fontColor);
+
+    // Options
+    std::string returnText = "ENTER to return to the main menu";
+    int returnTextWidth = MeasureText(returnText.c_str(), fontSize);
+    DrawText(returnText.c_str(), GetScreenWidth() / 2 - returnTextWidth / 2, GetScreenHeight() / 2 + margin, fontSize, fontColor);
 }
 
 void GameState::renderGameOver() const{
