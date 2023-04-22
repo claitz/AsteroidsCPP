@@ -7,12 +7,41 @@
 enum class GameStateType {
     MainMenu,
     InGame,
+    Options,
     GameOver
 };
 
-
 class GameState {
 public:
+    GameState();
+
+    void update();
+
+    void renderInGame() const;
+
+    void renderMainMenu() const;
+
+    void renderOptions();
+
+    void renderGameOver() const;
+
+    void changeResolution(int newResolutionIndex);
+
+    void addBullet(Bullet bullet) { bullets.push_back(bullet); }
+
+    // Setters
+    void setCurrentState(GameStateType newState) { currentState = newState; }
+
+    // Getters
+    GameStateType getCurrentState() const { return currentState; }
+    Spaceship &getSpaceship() { return spaceship; }
+    std::vector<Asteroid> &getAsteroids() { return asteroids; }
+    std::vector<Bullet> &getBullets() { return bullets; }
+    int getScore() const { return score; }
+    int getLives() const { return lives; }
+    int getLevel() const { return level; }
+
+private:
     int level = 1;
     int score = 0;
     int lives = Constants::STARTING_LIVES;
@@ -23,15 +52,20 @@ public:
 
     GameStateType currentState;
 
-    GameState();
+    int currentResolutionIndex = 2; // 800x600
+
+    Rectangle increaseResolutionButton;
+    Rectangle decreaseResolutionButton;
+
+    void init();
 
     void spawnAsteroids(int count);
-
-    void update();
 
     void updateMainMenu();
 
     void updateInGame();
+
+    void updateOptions();
 
     void updateGameOver();
 
@@ -41,15 +75,11 @@ public:
 
     void checkBulletCollisions();
 
-    void renderInGame() const;
-
-    void renderMainMenu() const;
-
-    void renderGameOver() const;
-
     void removeInactive();
 
     void addScore(int enemyLevel);
+
+    void die();
 
     void respawnSpaceship();
 
@@ -60,4 +90,8 @@ public:
     void nextLevel();
 
     void endGame();
+
+    void resetGame();
+
+    static void centerWindow();
 };

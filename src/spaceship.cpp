@@ -20,10 +20,6 @@ void Spaceship::createSpaceship(Spaceship &spaceship) {
     };
 }
 
-void Spaceship::setThrust(bool bNewThrust) {
-    this->bThrust = bNewThrust;
-}
-
 void Spaceship::move() {
     if (bDestroyed) return;
 
@@ -72,21 +68,8 @@ void Spaceship::draw() {
 
     DrawTriangleLines(transformedPoints[0], transformedPoints[1], transformedPoints[2], Constants::SPACESHIP_COLOR);
 
-    for (Bullet& bullet : gameState.bullets) {
+    for (Bullet& bullet : gameState.getBullets()) {
         bullet.draw();
-    }
-}
-
-void Spaceship::die() {
-    if (!bDestroyed) {
-        gameState.lives -= 1;
-        bDestroyed = true;
-
-        if (gameState.lives <= 0) {
-            gameState.endGame();
-        } else {
-            gameState.respawnSpaceship();
-        }
     }
 }
 
@@ -96,7 +79,7 @@ void Spaceship::shoot() {
     Bullet bullet;
 
     bullet.createBullet(position.x, position.y, angle, Constants::BULLET_SPEED);
-    gameState.bullets.push_back(bullet);
+    gameState.addBullet(bullet);
 }
 
 Spaceship::Spaceship(GameState &gameState) : gameState(gameState) {

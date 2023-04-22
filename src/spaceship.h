@@ -6,19 +6,34 @@
 class GameState;
 
 class Spaceship {
-    GameState& gameState;
-
 public:
     explicit Spaceship(GameState& gameState);
 
-    static void createSpaceship(Spaceship &spaceship);
-
     void update();
     void draw();
-    void setThrust(bool bNewThrust);
-    void move();
-    void die();
     void shoot();
+
+    // Setters
+    void setThrust(bool bNewThrust) { bThrust = bNewThrust; }
+    void setRotationDirection(float newRotationDirection) { rotationDirection = newRotationDirection; }
+    void setDestroyed(bool bNewDestroyed) { bDestroyed = bNewDestroyed; }
+    void setPosition(Vector2 newPosition) { position = newPosition; }
+    void setVelocity(Vector2 newVelocity) { velocity = newVelocity; }
+
+    // Getters
+    bool isDestroyed() const { return bDestroyed; }
+    Vector2 getPosition() const { return position; }
+    float getRadius() const { return radius; }
+    float getAngle() const { return angle; }
+    Vector2 getVelocity() const { return velocity; }
+    std::vector<Vector2> getShapePoints() const { return shapePoints; }
+
+private:
+    GameState& gameState;
+
+    static void createSpaceship(Spaceship &spaceship);
+
+    void move();
 
     Vector2 velocity{};
     Vector2 position{};

@@ -4,8 +4,10 @@
 
 int main() {
     // Initialization
-    //--------------------------------------------------------------------------------------
-    InitWindow(Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, "Asteroids");
+    //-------------------------------------------------------------------------------------
+
+    // Set the current resolution to the default resolution
+    InitWindow(Constants::RESOLUTIONS[0].x, Constants::RESOLUTIONS[0].y, "Asteroids");
 
     // Create a game state
     GameState gameState;
@@ -16,23 +18,24 @@ int main() {
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Input
-        if (gameState.currentState == GameStateType::InGame){
+        if (gameState.getCurrentState() == GameStateType::InGame){
             if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-                gameState.spaceship.rotationDirection = -1.0f;
+                gameState.getSpaceship().setRotationDirection(-1.0f);
             } else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-                gameState.spaceship.rotationDirection = 1.0f;
+                gameState.getSpaceship().setRotationDirection(1.0f);
             } else {
-                gameState.spaceship.rotationDirection = 0.0f;
+                gameState.getSpaceship().setRotationDirection(0);
+
             }
 
             if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-                gameState.spaceship.setThrust(true);
+                gameState.getSpaceship().setThrust(true);
             } else {
-                gameState.spaceship.setThrust(false);
+                gameState.getSpaceship().setThrust(false);
             }
 
             if (IsKeyPressed(KEY_SPACE)) {
-                gameState.spaceship.shoot();
+                gameState.getSpaceship().shoot();
             }
         }
 
@@ -45,12 +48,15 @@ int main() {
 
         ClearBackground(BLACK);
 
-        switch (gameState.currentState) {
+        switch (gameState.getCurrentState()) {
             case GameStateType::MainMenu:
                 gameState.renderMainMenu();
                 break;
             case GameStateType::InGame:
                 gameState.renderInGame();
+                break;
+            case GameStateType::Options:
+                gameState.renderOptions();
                 break;
             case GameStateType::GameOver:
                 gameState.renderGameOver();

@@ -1,11 +1,13 @@
 #pragma once
 #include "raylib.h"
+#include <vector>
 
 namespace Constants {
 
-    // Screen
-    const int SCREEN_WIDTH = 1920;
-    const int SCREEN_HEIGHT = 1080;
+   const std::vector<Vector2> RESOLUTIONS = {
+            {640, 480}, {800, 600}, {1024, 768}, {1280, 720}, {1366, 768}, {1280, 960},
+            {1080, 1200}, {1440, 900}, {1280, 1024}, {1920, 1080}, {2560, 1440}, {3840, 2160}
+    };
 
     // Spaceship
     const int STARTING_LIVES = 3;
