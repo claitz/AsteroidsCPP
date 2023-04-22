@@ -1,8 +1,6 @@
 # Asteroids
 
-A clone of the classic Atari's Asteroids game.
-
-The game is being developed in C++ and [Raylib](https://github.com/raysan5/raylib).
+A clone of the classic Atari's Asteroids game, developed using C++ and the [Raylib](https://github.com/raysan5/raylib) library.
 
 ## Features
 
